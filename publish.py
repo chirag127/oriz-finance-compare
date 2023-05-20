@@ -1,17 +1,27 @@
 # file name: publish.py
 import argparse
 
+import requests
 
-
-
-TOKEN = 'REDACTED_MEDIUM_TOKEN' # generated token
+TOKEN = "REDACTED_MEDIUM_TOKEN"  # generated token
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0"
+}
 
 
 def post_article(data):
-    '''posts an article to medium with the input payload'''
+    """posts an article to medium with the input payload"""
     author_id = get_author_id()
     url = "https://api.medium.com/v1/users/{}/posts".format(author_id)
-    response = requests.post(url, headers=headers, data=data)
+    response = requests.post(
+        url,
+        headers=headers,
+        json=data,
+        params={"Authorization": "Bearer {}".format(TOKEN)},
+    )
+
+    print(response.status_code)
+    print(response.json())
     if response.status_code in [200, 201]:
         response_json = response.json()
         # get URL of uploaded post
@@ -22,63 +32,72 @@ def post_article(data):
 
 # refer to full code for request headers
 def get_author_id():
-    '''uses the /me medium api to get the user's author id'''
-    response = requests.get("https://api.medium.com/v1/me", headers=headers, params={"Authorization": "Bearer {}".format(TOKEN)})
+    """uses the /me medium api to get the user's author id"""
+    response = requests.get(
+        "https://api.medium.com/v1/me",
+        headers=headers,
+        params={"Authorization": "Bearer {}".format(TOKEN)},
+    )
     if response.status_code == 200:
-		# if response is OK, return the authorId
-        return response.json()['data']['id']
+        # if response is OK, return the authorId
+        return response.json()["data"]["id"]
     return None
 
 
 def prep_data(args):
-    '''prepares payload to publish post'''
+    """prepares payload to publish post"""
     data = {
-        "title": args['title'],
+        "title": args["title"],
     }
-    data = {**data, **read_file(args['filepath'])}
-    if args['tags']:
-        data['tags'] = [t.strip() for t in args['tags'].split(',')]
-    data['publishStatus'] = 'draft'
-    if args['pub']:
-        data['publishStatus'] = args['pub']
+    data = {**data, **read_file(args["filepath"])}
+    if args["tags"]:
+        data["tags"] = [t.strip() for t in args["tags"].split(",")]
+    data["publishStatus"] = "draft"
+    if args["pub"]:
+        data["publishStatus"] = args["pub"]
     return data
 
+
 def read_file(filepath):
-	'''reads file from input filepath and returns a dict with the file content and contentFormat for the publish payload'''
-	# f = open(filepath, 'r')
-	# content = f.read()
-    # if not f.closed:
-    #     f.close()
-
-    with open(filepath, 'r') as f:
-
+    with open(filepath, "r") as f:
         content = f.read()
 
-
-
-    if filepath.find('.') < 0:
+    if filepath.find(".") < 0:
         file_ext = ""
     else:
-        file_ext = filepath[filepath.find(".")+1:]
-    if file_ext == "md": file_ext = "markdown"
+        file_ext = filepath[filepath.find(".") + 1 :]
+    if file_ext == "md":
+        file_ext = "markdown"
     return {"content": content, "contentFormat": file_ext}
+
 
 if __name__ == "__main__":
     # initialise parser
     parser = argparse.ArgumentParser()
 
     # add compulsory arguments
-    parser.add_argument('filepath') # positional argument
-    parser.add_argument('-t', '--title', required=True, help="title of post", type=str) # named argument
+    parser.add_argument("filepath")  # positional argument
+    parser.add_argument(
+        "-t", "--title", required=True, help="title of post", type=str
+    )  # named argument
 
     # add compulsory arguments
-    parser.add_argument('-a', '--tags', required=False, help="tags, separated by ,", type=str)
-    parser.add_argument('-p', '--pub', required=False, help="publish status, one of draft/unlisted/public, defaults to draft", type=str, choices=["public", "unlisted", "draft"])
+    parser.add_argument(
+        "-a", "--tags", required=False, help="tags, separated by ,", type=str
+    )
+    parser.add_argument(
+        "-p",
+        "--pub",
+        required=False,
+        help="publish status, one of draft/unlisted/public, defaults to draft",
+        type=str,
+        choices=["public", "unlisted", "draft"],
+    )
 
     # read arguments
     args = parser.parse_args()
 
-		# rest of code here covered later
-		data = prep_data(vars(args)) # point 4
-    post_url = post_article(data) # point 5
+    data = prep_data(vars(args))
+
+    post_url = post_article(data)  # point 5
     print(post_url)
