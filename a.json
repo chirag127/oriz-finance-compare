@@ -1,0 +1,35 @@
+{'type': 2, 'invocationId': '0', 'item': {'messages': [
+            {'text': 'Hello world', 'author': 'user', 'from': {'id': '914798687571389', 'name': None
+                }, 'createdAt': '2023-05-20T19: 17: 12.3874751+00: 00', 'timestamp': '2023-05-20T19: 17: 12.3835604+00: 00', 'locale': 'en-us', 'market': 'en-us', 'region': 'us', 'messageId': '44de2675-148f-42ae-9878-4cce12ee6a63', 'requestId': '44de2675-148f-42ae-9878-4cce12ee6a63', 'nlu': {'scoredClassification': {'classification': 'DEEP_LEO', 'score': None
+                    }, 'classificationRanking': [
+                        {'classification': 'DEEP_LEO', 'score': None
+                        }
+                    ], 'qualifyingClassifications': None, 'ood': None, 'metaData': None, 'entities': None
+                }, 'offense': 'None', 'feedback': {'tag': None, 'updatedOn': None, 'type': 'None'
+                }, 'contentOrigin': 'cib', 'privacy': None, 'inputMethod': 'Keyboard'
+            },
+            {'text': 'Hello, this is Bing. Welcome to the chat mode. 😊', 'author': 'bot', 'createdAt': '2023-05-20T19: 17: 17.2330281+00: 00', 'timestamp': '2023-05-20T19: 17: 17.2330281+00: 00', 'messageId': '5daab80a-f799-410d-a651-038de82d1550', 'requestId': '44de2675-148f-42ae-9878-4cce12ee6a63', 'offense': 'None', 'adaptiveCards': [
+                    {'type': 'AdaptiveCard', 'version': '1.0', 'body': [
+                            {'type': 'TextBlock', 'text': 'Hello, this is Bing. Welcome to the chat mode. 😊\n', 'wrap': True
+                            }
+                        ]
+                    }
+                ], 'sourceAttributions': [], 'feedback': {'tag': None, 'updatedOn': None, 'type': 'None'
+                }, 'contentOrigin': 'DeepLeo', 'privacy': None, 'suggestedResponses': [
+                    {'text': 'What can you do?', 'author': 'user', 'createdAt': '2023-05-20T19: 17: 20.7081596+00: 00', 'timestamp': '2023-05-20T19: 17: 20.7081596+00: 00', 'messageId': 'c753684e-322d-43a5-abe3-749459a0700b', 'messageType': 'Suggestion', 'offense': 'Unknown', 'feedback': {'tag': None, 'updatedOn': None, 'type': 'None'
+                        }, 'contentOrigin': 'DeepLeo', 'privacy': None
+                    },
+                    {'text': 'Tell me a story.', 'author': 'user', 'createdAt': '2023-05-20T19: 17: 20.7081611+00: 00', 'timestamp': '2023-05-20T19: 17: 20.7081611+00: 00', 'messageId': '1529a1d6-cad9-4e97-9087-7331f1204a41', 'messageType': 'Suggestion', 'offense': 'Unknown', 'feedback': {'tag': None, 'updatedOn': None, 'type': 'None'
+                        }, 'contentOrigin': 'DeepLeo', 'privacy': None
+                    },
+                    {'text': 'Show me a picture of a cat.', 'author': 'user', 'createdAt': '2023-05-20T19: 17: 20.7081615+00: 00', 'timestamp': '2023-05-20T19: 17: 20.7081615+00: 00', 'messageId': 'b9dbf42d-ee09-41b0-a524-7ba255fd02f7', 'messageType': 'Suggestion', 'offense': 'Unknown', 'feedback': {'tag': None, 'updatedOn': None, 'type': 'None'
+                        }, 'contentOrigin': 'DeepLeo', 'privacy': None
+                    }
+                ]
+            }
+        ], 'firstNewMessageIndex': 1, 'defaultChatName': None, 'conversationId': '51D|BingProd|CD7E11F8AC8F45AADBBCE2A726BA4E2BF214B234BCA6172D42B1186B79C27A71', 'requestId': '44de2675-148f-42ae-9878-4cce12ee6a63', 'conversationExpiryTime': '2023-05-21T01: 17: 21.2164425Z', 'shouldInitiateConversation': True, 'telemetry': {'metrics': None, 'startTime': '2023-05-20T19: 17: 12.3836435Z'
+        }, 'throttling': {'maxNumUserMessagesInConversation': 20, 'numUserMessagesInConversation': 1
+        }, 'result': {'value': 'Success', 'serviceVersion': '20230519.42'
+        }
+    }
+}
