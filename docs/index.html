@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance Compare — India Financial Product Comparison</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #1f6feb;
+    --accent-hover: #388bfd;
+    --green: #2ea043;
+    --header-bg: #010409;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* Nav */
+  nav {
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.3px;
+  }
+  .nav-links { display: flex; gap: 24px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    padding: 64px 24px 48px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 600px;
+    margin-bottom: 24px;
+  }
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .badge.active { border-color: var(--accent); color: var(--accent-hover); }
+
+  /* Main */
+  main { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* Section */
+  section { margin-bottom: 64px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .section-meta { font-size: 13px; color: var(--muted); }
+
+  /* Table wrapper */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    white-space: nowrap;
+  }
+  thead th {
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--text); }
+  thead th.sort-asc::after { content: " \2191"; }
+  thead th.sort-desc::after { content: " \2193"; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+  td {
+    padding: 11px 14px;
+    color: var(--text);
+    vertical-align: top;
+    white-space: normal;
+    min-width: 100px;
+  }
+  td:first-child { font-weight: 500; white-space: nowrap; }
+  .free { color: var(--green); font-weight: 500; }
+  .highlight { color: var(--accent-hover); }
+
+  /* Roadmap */
+  .roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .roadmap-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .roadmap-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .roadmap-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .roadmap-card .tag {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .tag.live { border-color: var(--green); color: var(--green); }
+  .tag.planned { border-color: #6e40c9; color: #a371f7; }
+
+  /* Disclaimer */
+  .disclaimer {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-brand">Finance Compare</a>
+  <ul class="nav-links">
+    <li><a href="#banks">Banks</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="https://github.com/chirag127/finance-compare">GitHub</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <h1>India Financial Product Comparison</h1>
+  <p>Side-by-side data on zero-balance bank accounts, private banks, interest rates, charges, and infrastructure. Stocks and investment products coming next.</p>
+  <div class="badge-row">
+    <span class="badge active">Zero-balance accounts</span>
+    <span class="badge active">Private banks</span>
+    <span class="badge">Stocks (planned)</span>
+    <span class="badge">Mutual funds (planned)</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- Zero Balance Accounts -->
+  <section id="banks">
+    <div class="section-header">
+      <h2>Zero-Balance Savings Accounts</h2>
+      <span class="section-meta">12 banks — click column header to sort</span>
+    </div>
+    <div class="table-wrap">
+      <table id="zba-table">
+        <thead>
+          <tr>
+            <th data-col="0">Bank / Account</th>
+            <th data-col="1">Savings Rate (up to 1L)</th>
+            <th data-col="2">FD Rate (1 yr)</th>
+            <th data-col="3">ATM Withdrawal</th>
+            <th data-col="4">Debit Card (p.a.)</th>
+            <th data-col="5">Branches</th>
+            <th data-col="6">ATMs</th>
+            <th data-col="7">SMS Alerts</th>
+            <th data-col="8">Net / Mobile / UPI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>RBL Basic Savings</td>
+            <td class="highlight">6.5%</td>
+            <td>5.75%</td>
+            <td>Rs 20 (own) / Rs 23 (other)</td>
+            <td>Rs 150</td>
+            <td>398</td>
+            <td>1,221</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>IDFC First Pratham</td>
+            <td>4%</td>
+            <td>6%</td>
+            <td class="free">Free (unlimited)</td>
+            <td>Rs 250</td>
+            <td>479</td>
+            <td>159</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>IndusInd Indus Online</td>
+            <td>4%</td>
+            <td>6.5%</td>
+            <td>5 free/mo then Rs 20</td>
+            <td>Rs 200</td>
+            <td>2,000+</td>
+            <td>2,879</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>YES Bank Smart Salary</td>
+            <td>4%</td>
+            <td>6.25%</td>
+            <td>5 free/mo then Rs 20</td>
+            <td>Rs 199</td>
+            <td>1,000+</td>
+            <td>1,800+</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>Utkarsh BSBDA</td>
+            <td class="highlight">7%</td>
+            <td>7%</td>
+            <td class="free">Free (own ATMs)</td>
+            <td class="free">Free</td>
+            <td>830+</td>
+            <td>500+</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>AU Digital Savings</td>
+            <td class="highlight">7%</td>
+            <td>6.5%</td>
+            <td>Free 4 txns/mo</td>
+            <td>Rs 299</td>
+            <td>1,000+</td>
+            <td>900+</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>Kotak 811 Digital</td>
+            <td>3.5%</td>
+            <td>6.2%</td>
+            <td>Free (own) / Rs 8.5 bal-inq other</td>
+            <td class="free">Free (virtual)</td>
+            <td>1,780+</td>
+            <td>2,352</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>HDFC BSBDA</td>
+            <td>3%</td>
+            <td>6.1%</td>
+            <td>4 free/mo (own+other)</td>
+            <td class="free">Free</td>
+            <td>7,821</td>
+            <td>20,000+</td>
+            <td>Rs 15/mo</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>Standard Chartered Aasaan</td>
+            <td>3.5%</td>
+            <td>5.5%</td>
+            <td>3 free/mo (SC ATMs)</td>
+            <td>Rs 250</td>
+            <td>100+</td>
+            <td>250+</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>SBI BSBDA</td>
+            <td>2.7%</td>
+            <td>6.8%</td>
+            <td>4 free/mo (own)</td>
+            <td class="free">Free</td>
+            <td>22,542</td>
+            <td>65,000+</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>Jupiter Money</td>
+            <td class="highlight">3–7%</td>
+            <td>N/A</td>
+            <td class="free">Free (Federal Bank)</td>
+            <td class="free">Free</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+          <tr>
+            <td>Fi Money</td>
+            <td class="highlight">3–7%</td>
+            <td>N/A</td>
+            <td class="free">Free (Federal Bank)</td>
+            <td class="free">Free</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td class="free">Free</td>
+            <td class="free">Free</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Top Private Banks -->
+  <section id="private-banks">
+    <div class="section-header">
+      <h2>Top Private Banks — Overview</h2>
+      <span class="section-meta">Key infrastructure metrics</span>
+    </div>
+    <div class="table-wrap">
+      <table id="private-table">
+        <thead>
+          <tr>
+            <th data-col="0">Bank</th>
+            <th data-col="1">Branches</th>
+            <th data-col="2">ATMs</th>
+            <th data-col="3">Employees</th>
+            <th data-col="4">Net Profit (FY23)</th>
+            <th data-col="5">Market Cap</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HDFC Bank</td>
+            <td>7,821</td>
+            <td>20,000+</td>
+            <td>1,41,579</td>
+            <td>Rs 44,109 Cr</td>
+            <td class="highlight">Rs 12.5 L Cr</td>
+          </tr>
+          <tr>
+            <td>ICICI Bank</td>
+            <td>6,074</td>
+            <td>16,650</td>
+            <td>1,09,242</td>
+            <td>Rs 31,896 Cr</td>
+            <td>Rs 7.2 L Cr</td>
+          </tr>
+          <tr>
+            <td>Kotak Mahindra</td>
+            <td>1,780+</td>
+            <td>2,963</td>
+            <td>61,000+</td>
+            <td>Rs 10,939 Cr</td>
+            <td>Rs 3.6 L Cr</td>
+          </tr>
+          <tr>
+            <td>Axis Bank</td>
+            <td>4,903</td>
+            <td>15,953</td>
+            <td>94,000+</td>
+            <td>Rs 9,580 Cr</td>
+            <td>Rs 2.9 L Cr</td>
+          </tr>
+          <tr>
+            <td>IndusInd Bank</td>
+            <td>2,606</td>
+            <td>2,879</td>
+            <td>35,000+</td>
+            <td>Rs 7,389 Cr</td>
+            <td>Rs 1.1 L Cr</td>
+          </tr>
+          <tr>
+            <td>Yes Bank</td>
+            <td>1,169</td>
+            <td>1,880</td>
+            <td>26,000+</td>
+            <td>Rs 725 Cr</td>
+            <td>Rs 0.4 L Cr</td>
+          </tr>
+          <tr>
+            <td>IDFC First Bank</td>
+            <td>791</td>
+            <td>1,000+</td>
+            <td>30,000+</td>
+            <td>Rs 2,957 Cr</td>
+            <td>Rs 0.5 L Cr</td>
+          </tr>
+          <tr>
+            <td>RBL Bank</td>
+            <td>501</td>
+            <td>1,401</td>
+            <td>10,000+</td>
+            <td>Rs 883 Cr</td>
+            <td>Rs 0.2 L Cr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section id="roadmap">
+    <div class="section-header">
+      <h2>Roadmap</h2>
+      <span class="section-meta">What comes next</span>
+    </div>
+    <div class="roadmap-grid">
+      <div class="roadmap-card">
+        <h3>Zero-Balance Accounts</h3>
+        <p>12 banks compared — interest rates, ATM charges, branches, digital banking fees.</p>
+        <span class="tag live">Live</span>
+      </div>
+      <div class="roadmap-card">
+        <h3>Top Private Banks</h3>
+        <p>Infrastructure overview — branches, ATMs, employees, financials.</p>
+        <span class="tag live">Live</span>
+      </div>
+      <div class="roadmap-card">
+        <h3>Stock Comparison</h3>
+        <p>P/E, dividend yield, 52-week range, sector-wise filtering for NSE/BSE listed stocks.</p>
+        <span class="tag planned">Planned</span>
+      </div>
+      <div class="roadmap-card">
+        <h3>Mutual Funds</h3>
+        <p>Expense ratio, 1/3/5-yr CAGR, AUM, fund manager track record across categories.</p>
+        <span class="tag planned">Planned</span>
+      </div>
+      <div class="roadmap-card">
+        <h3>Fixed Deposits</h3>
+        <p>FD rates across all major banks and NBFCs, senior citizen rates, premature withdrawal penalties.</p>
+        <span class="tag planned">Planned</span>
+      </div>
+      <div class="roadmap-card">
+        <h3>Credit Cards</h3>
+        <p>Rewards rate, annual fee, lounge access, joining benefits — all on one screen.</p>
+        <span class="tag planned">Planned</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimer -->
+  <section>
+    <div class="disclaimer">
+      <strong>Data disclaimer:</strong> All data sourced from publicly available bank websites, RBI publications, and BSE/NSE filings. Rates and charges change frequently — verify directly with the bank before making financial decisions. This site is for informational comparison only and does not constitute financial advice.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Finance Compare &mdash; <a href="https://github.com/chirag127/finance-compare">github.com/chirag127/finance-compare</a> &mdash; MIT License</p>
+</footer>
+
+<script>
+  document.querySelectorAll('table').forEach(table => {
+    const headers = table.querySelectorAll('thead th');
+    let sortCol = -1, sortDir = 1;
+
+    headers.forEach((th, col) => {
+      th.addEventListener('click', () => {
+        if (sortCol === col) sortDir *= -1;
+        else { sortCol = col; sortDir = 1; }
+
+        headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+        th.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
+
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((a, b) => {
+          const ta = a.cells[col]?.textContent.trim() ?? '';
+          const tb = b.cells[col]?.textContent.trim() ?? '';
+          const na = parseFloat(ta.replace(/[^0-9.]/g, ''));
+          const nb = parseFloat(tb.replace(/[^0-9.]/g, ''));
+          if (!isNaN(na) && !isNaN(nb)) return (na - nb) * sortDir;
+          return ta.localeCompare(tb) * sortDir;
+        });
+        rows.forEach(r => tbody.appendChild(r));
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -119,7 +119,8 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
-# Environments
+# Secrets — never commit
+bing_cookies.json
 .env
 .venv
 env/

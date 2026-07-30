@@ -1,0 +1,11 @@
+[
+  {
+    "domain": ".bing.com",
+    "name": "_U",
+    "value": "YOUR_U_COOKIE_VALUE_HERE",
+    "path": "/",
+    "secure": true,
+    "httpOnly": false,
+    "sameSite": "no_restriction"
+  }
+]
