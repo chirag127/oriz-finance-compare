@@ -1,0 +1,19 @@
+[project]
+name = "oriz-finance-compare"
+version = "0.1.0"
+description = "Finance comparison data + publishing scripts (banks, investments, stocks)"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+scrape = ["EdgeGPT>=0.13"]
+dev = [
+    "pytest>=8.0",
+    "responses>=0.25",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["scripts"]
+testpaths = ["tests"]
